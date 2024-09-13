@@ -10,3 +10,7 @@
 - cookie-parser
 - higher order function
 - node api error
+- mongoose-aggregate-paginate-v2
+- middleware
+- bcrypt
+- jwt is a bearer token
