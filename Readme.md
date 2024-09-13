@@ -14,3 +14,4 @@
 - middleware
 - bcrypt
 - jwt is a bearer token
+- multer
