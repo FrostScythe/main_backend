@@ -27,10 +27,6 @@ const userSchema = new Schema(
     },
     avatar: {
       type: String,
-      required: true,
-    },
-    avatar: {
-      type: String,
     },
     watchHistory: [
       {
@@ -38,9 +34,9 @@ const userSchema = new Schema(
         ref: "Video",
       },
     ],
-    passwords: {
+    password: {
       type: String,
-      required: [true.valueOf, "Password is requirded"],
+      required: [true, "Password is required"],
     },
     refreshToken: {
       type: String,
@@ -53,16 +49,16 @@ const userSchema = new Schema(
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
-  this.passwords = bcrypt.hash(this.password, 10);
+  this.password = await bcrypt.hash(this.password, 10);
   next();
 });
 
-userSchema.methords.isPasswordCOrrect = async function (password) {
+userSchema.methods.isPasswordCorrect = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-userSchema.methords.generateAccessToken = function () {
-  jwt.sign(
+userSchema.methods.generateAccessToken = function () {
+  return jwt.sign(
     {
       id: this._id,
       email: this.email,
@@ -73,8 +69,9 @@ userSchema.methords.generateAccessToken = function () {
     { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
   );
 };
-userSchema.methords.generateRefreshToken = function () {
-  jwt.sign(
+
+userSchema.methods.generateRefreshToken = function () {
+  return jwt.sign(
     {
       id: this._id,
     },
